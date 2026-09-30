@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import Button from './ui/Button';
 import { EASE_EXPO } from '../lib/motion';
+import { useIntro } from '../lib/intro';
 
 // Client hero film (web-optimised copy: 1080p/30fps, no audio) + its first frame as poster.
 // The abstract gradient layer below shows until the video can play, and stays as the fallback.
@@ -20,6 +21,7 @@ export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const [videoReady, setVideoReady] = useState(false);
+  const { ready } = useIntro(); // entrance waits for the preloader to lift
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
@@ -36,7 +38,7 @@ export default function Hero() {
       >
         <motion.div
           initial={{ scale: 1.18, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
+          animate={ready ? { scale: 1, opacity: 1 } : undefined}
           transition={{ duration: 2.4, ease: EASE_EXPO }}
           className="absolute inset-0"
         >
@@ -81,7 +83,7 @@ export default function Hero() {
                   <motion.span
                     className="block"
                     initial={{ y: '105%' }}
-                    animate={{ y: 0 }}
+                    animate={ready ? { y: 0 } : undefined}
                     transition={{ duration: 1.3, ease: EASE_EXPO, delay: 0.6 + i * 0.12 }}
                   >
                     {line}
@@ -92,7 +94,7 @@ export default function Hero() {
 
             <motion.p
               initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={ready ? { opacity: 1, y: 0 } : undefined}
               transition={{ duration: 1, ease: EASE_EXPO, delay: 1.25 }}
               className="mt-7 text-[18px] text-white/85 lg:text-[20px]"
             >
@@ -102,7 +104,7 @@ export default function Hero() {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={ready ? { opacity: 1, y: 0 } : undefined}
             transition={{ duration: 1, ease: EASE_EXPO, delay: 1.4 }}
             className="flex flex-col gap-3 sm:flex-row"
           >
@@ -121,17 +123,18 @@ export default function Hero() {
 
 /* Parentheses open like the Brandbook's "evolving lens" to reveal the label */
 function Eyebrow() {
+  const { ready } = useIntro();
   return (
     <motion.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      animate={ready ? { opacity: 1 } : undefined}
       transition={{ duration: 0.6, delay: 0.3 }}
       className="inline-flex items-center text-white"
     >
       <span className="font-display text-[26px] font-light leading-none">(</span>
       <motion.span
         initial={{ maxWidth: 0, opacity: 0 }}
-        animate={{ maxWidth: 320, opacity: 1 }}
+        animate={ready ? { maxWidth: 320, opacity: 1 } : undefined}
         transition={{ duration: 1.4, ease: EASE_EXPO, delay: 0.45 }}
         className="overflow-hidden whitespace-nowrap"
       >
@@ -164,6 +167,7 @@ function AbstractBackdrop() {
 
 /* Hairline column grid — the quiet, slightly technical layer over the editorial image */
 function GridLines() {
+  const { ready } = useIntro();
   return (
     <div className="pointer-events-none absolute inset-0">
       <div className="container-site grid h-full grid-cols-4 lg:grid-cols-6">
@@ -171,7 +175,7 @@ function GridLines() {
           <motion.div
             key={i}
             initial={{ scaleY: 0 }}
-            animate={{ scaleY: 1 }}
+            animate={ready ? { scaleY: 1 } : undefined}
             transition={{ duration: 1.8, ease: EASE_EXPO, delay: 0.2 + i * 0.08 }}
             className={`origin-top border-l border-white/[0.05] ${i >= 4 ? 'hidden lg:block' : ''} ${i === 0 ? 'border-l-0' : ''}`}
           />

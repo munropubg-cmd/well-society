@@ -1,4 +1,6 @@
 import { useSmoothScroll } from './lib/useSmoothScroll';
+import { IntroProvider } from './lib/intro';
+import Preloader from './components/Preloader';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Goals from './components/Goals';
@@ -18,7 +20,8 @@ export default function App() {
   useSmoothScroll();
 
   return (
-    <>
+    <IntroProvider>
+      <Preloader />
       <Header />
       <main>
         <div id="top" />
@@ -40,6 +43,6 @@ export default function App() {
         <JoinMovement />
       </main>
       <Footer />
-    </>
+    </IntroProvider>
   );
 }

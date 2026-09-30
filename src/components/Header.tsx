@@ -4,6 +4,7 @@ import Logo from './ui/Logo';
 import Button from './ui/Button';
 import SearchOverlay from './SearchOverlay';
 import { EASE_EXPO, EASE_INOUT } from '../lib/motion';
+import { useIntro } from '../lib/intro';
 
 export const NAV = [
   { label: 'Treatments', href: '#treatments' },
@@ -20,6 +21,7 @@ export default function Header() {
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const { ready } = useIntro(); // slide in once the preloader lifts
 
   // Glass background once past the top; tuck away on scroll down, return on scroll up.
   useMotionValueEvent(scrollY, 'change', (y) => {
@@ -36,7 +38,7 @@ export default function Header() {
     <>
       <motion.header
         initial={{ y: -40, opacity: 0 }}
-        animate={{ y: hidden ? '-100%' : 0, opacity: 1 }}
+        animate={{ y: hidden ? '-100%' : ready ? 0 : -40, opacity: ready ? 1 : 0 }}
         transition={{ duration: hidden ? 0.5 : 0.9, ease: EASE_EXPO, delay: scrolled ? 0 : 0.4 }}
         className="fixed inset-x-0 top-0 z-50"
       >
