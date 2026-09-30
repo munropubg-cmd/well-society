@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import Button from './ui/Button';
 import { EASE_EXPO } from '../lib/motion';
@@ -22,6 +22,15 @@ export default function Hero() {
   const reduce = useReducedMotion();
   const [videoReady, setVideoReady] = useState(false);
   const { ready } = useIntro(); // entrance waits for the preloader to lift
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Start the film only once the preloader lifts, from the beginning
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!ready || !v) return;
+    v.currentTime = 0;
+    v.play().catch(() => {});
+  }, [ready]);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
@@ -43,20 +52,17 @@ export default function Hero() {
           className="absolute inset-0"
         >
           <AbstractBackdrop />
+          {/* No autoplay: it buffers during the preloader and starts from frame one as it lifts */}
           <video
+            ref={videoRef}
             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1600ms] ${videoReady ? 'opacity-100' : 'opacity-0'}`}
             src={HERO_VIDEO}
             poster={HERO_POSTER}
-            autoPlay
             muted
             loop
             playsInline
             preload="auto"
-            onCanPlay={(e) => {
-              setVideoReady(true);
-              // Some browsers hold muted autoplay until nudged
-              e.currentTarget.play().catch(() => {});
-            }}
+            onCanPlay={() => setVideoReady(true)}
             aria-hidden
           />
         </motion.div>
