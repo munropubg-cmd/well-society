@@ -1,0 +1,14 @@
+# Dependencies (reinstalled with `npm install`)
+node_modules/
+
+# Build output
+dist/
+
+# Local / editor files
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+.vscode/
+.idea/
