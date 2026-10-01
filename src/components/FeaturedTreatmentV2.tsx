@@ -82,7 +82,15 @@ export default function FeaturedTreatmentV2({ id, background }: Props) {
 
       {/* Vial card carousel, overlapping her lower half */}
       <div className="container-site relative z-20 -mt-[220px] pb-24 sm:-mt-[260px] lg:-mt-[290px] lg:pb-32">
-        <div ref={viewportRef} className="overflow-hidden">
+        {/* Edge fades: each side fades only while there are more cards off-screen that way */}
+        <div
+          ref={viewportRef}
+          className="edge-fade overflow-hidden"
+          style={{
+            ['--fade-l' as string]: index > 0 ? 'clamp(48px, 9vw, 160px)' : '0px',
+            ['--fade-r' as string]: index < maxIndex ? 'clamp(48px, 9vw, 160px)' : '0px',
+          }}
+        >
           <motion.div
             ref={trackRef}
             className="flex gap-3"

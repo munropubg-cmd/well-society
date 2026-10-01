@@ -130,6 +130,24 @@ html.lenis body {
   50% { transform: translateX(-50%) scaleX(0.8); opacity: 0.55; }
 }
 
+/* Carousel edge fades (FeaturedTreatmentV2). Registered properties so the fade widths
+   animate smoothly when a side turns on/off. */
+@property --fade-l {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+@property --fade-r {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+.edge-fade {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent 100%);
+  transition: --fade-l 0.7s cubic-bezier(0.16, 1, 0.3, 1), --fade-r 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Goal card images: very slow zoom in/out so the cards never sit still */
 .goal-breathe {
   animation: goal-breathe 18s ease-in-out infinite;
