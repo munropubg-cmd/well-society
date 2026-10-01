@@ -4,13 +4,11 @@ import Button from './ui/Button';
 import ArrowButton from './ui/ArrowButton';
 import { useCarousel } from '../lib/useCarousel';
 import ThemeSwitcher, { SECTION_THEMES, useSectionTheme } from './ui/ThemeSwitcher';
-import AmbientVideo from './ui/AmbientVideo';
 import Reveal, { RevealLines } from './ui/Reveal';
 import { EASE_EXPO } from '../lib/motion';
 
-// Runner loop — client's portrait film, web-encoded (720px wide, muted, 8s loop).
-const FEATURE_VIDEO = '/media/goals.mp4';
-const FEATURE_POSTER = '/media/goals-poster.webp';
+// Feature card image (runner still)
+const FEATURE_IMAGE = '/media/goals/feature.webp';
 
 type Goal = {
   title: string;
@@ -161,25 +159,17 @@ export default function Goals() {
   );
 }
 
-/* Sticky feature card: ambient film, intro copy top-left, Explore all at the bottom */
+/* Sticky feature card: runner image, heading plate top-left, Explore all at the bottom */
 function FeatureCard() {
   return (
     <article className={`grain relative overflow-hidden bg-ink-3 ${CARD_SIZE} max-lg:h-[480px]`}>
-      <AmbientVideo
-        src={FEATURE_VIDEO}
-        poster={FEATURE_POSTER}
-        fallback={
-          <div className="absolute inset-0 bg-[#0d0f1c]">
-            <div
-              className="absolute -left-1/4 top-[10%] h-[120%] w-[140%] rounded-full opacity-80 blur-[90px]"
-              style={{ background: 'radial-gradient(circle, #253990 0%, rgba(37,57,144,0.4) 40%, transparent 70%)', animation: 'drift-a 18s ease-in-out infinite' }}
-            />
-            <div
-              className="absolute -right-1/3 -top-1/4 h-[80%] w-[110%] rounded-full opacity-60 blur-[100px]"
-              style={{ background: 'radial-gradient(circle, #DDD3B9 0%, rgba(134,88,51,0.45) 40%, transparent 70%)', animation: 'drift-b 22s ease-in-out infinite' }}
-            />
-          </div>
-        }
+      {/* Runner still with the same slow breathing zoom as the goal cards */}
+      <img
+        src={FEATURE_IMAGE}
+        alt=""
+        draggable={false}
+        className="goal-breathe absolute inset-0 h-full w-full select-none object-cover"
+        style={{ objectPosition: '60% 40%' }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/70" />
 
